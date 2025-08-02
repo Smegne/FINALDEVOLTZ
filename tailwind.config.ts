@@ -1,4 +1,4 @@
-import type { Config } from "tailwindcss"
+import type { Config } from "tailwindcss";
 
 const config: Config = {
   darkMode: ["class"],
@@ -18,10 +18,13 @@ const config: Config = {
         "2xl": "1400px",
       },
     },
-
-    
     extend: {
       colors: {
+        // 🌈 DevVoltz Brand Colors
+        brandYellow: "#FFD600", // Bold. Bright. Visionary.
+        brandBlue: "#299DD5",   // Tech-driven. Trusted. Intelligent.
+        brandPurple: "#A65885", // Creative. Energetic. Future-ready.
+
         coral: {
           50: "#fef7f7",
           100: "#fdeaea",
@@ -103,9 +106,10 @@ const config: Config = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
-} satisfies Config
+  plugins: [
+    require("tailwindcss-animate"),
+    require("@tailwindcss/typography"),
+  ],
+};
 
-export default config
-
-
+export default config;
