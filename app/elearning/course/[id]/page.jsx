@@ -1,5 +1,7 @@
 "use client";
 
+import "./each-course.css";
+
 import { useParams, useRouter } from "next/navigation";
 import { allCourses } from "@/lib/data";
 import { courseTopics } from "@/lib/topics";
@@ -7,6 +9,7 @@ import ReactMarkdown from "react-markdown";
 import hljs from "highlight.js";
 import "highlight.js/styles/github.css";
 import dynamic from "next/dynamic";
+
 import {
   FaBook,
   FaCode,
@@ -15,10 +18,11 @@ import {
   FaChartLine,
   FaRegListAlt,
   FaCopy,
+  FaBars,
+  FaTimes,
 } from "react-icons/fa";
 import { useState, useEffect } from "react";
 
-// Load Monaco dynamically
 const MonacoEditor = dynamic(() => import("@monaco-editor/react"), {
   ssr: false,
 });
@@ -39,6 +43,9 @@ export default function CoursePage() {
   const [jsCode, setJsCode] = useState("// Your JS here");
   const [editorTab, setEditorTab] = useState("html");
   const [isFullScreen, setIsFullScreen] = useState(false);
+
+  const [showLeftSidebar, setShowLeftSidebar] = useState(false);
+  const [showRightSidebar, setShowRightSidebar] = useState(false);
 
   const progress = Math.round(((currentIndex + 1) / topics.length) * 100);
 
@@ -78,9 +85,31 @@ export default function CoursePage() {
 
   return (
     <div className="min-h-screen bg-gray-100 text-gray-900 font-sans">
+      {/* Mobile header with hamburger toggles */}
+      <div className="lg:hidden flex justify-between items-center p-4 bg-white border-b border-gray-200">
+        <button
+          onClick={() => setShowLeftSidebar(!showLeftSidebar)}
+          className="text-gray-800 text-2xl"
+          aria-label="Toggle left sidebar"
+        >
+          {showLeftSidebar ? <FaTimes /> : <FaBars />}
+        </button>
+        <button
+          onClick={() => setShowRightSidebar(!showRightSidebar)}
+          className="bg-gray-200 text-gray-800 px-3 py-1 rounded text-sm"
+          aria-label="Toggle right sidebar"
+        >
+          {showRightSidebar ? "Hide Tools" : "Show Tools"}
+        </button>
+      </div>
+
       <div className="flex flex-col lg:flex-row">
-        {/* Sidebar */}
-        <aside className="w-full lg:w-1/4 bg-gray-100 border-b lg:border-b-0 lg:border-r border-gray-200 p-4 overflow-y-auto">
+        {/* Left Sidebar */}
+        <aside
+          className={`bg-gray-100 border-b lg:border-b-0 lg:border-r border-gray-200 p-4 overflow-y-auto transition-all duration-300 ${
+            showLeftSidebar ? "left-sidebar-expanded" : "left-sidebar-collapsed"
+          } w-25 lg:w-1/6`}
+        >
           <h2 className="text-xl font-bold mb-4 text-gray-800">HTML Tutorial</h2>
           <ul className="space-y-1 text-sm">
             {topics.map((topic, index) => (
@@ -89,6 +118,7 @@ export default function CoursePage() {
                   onClick={() => {
                     setCurrentIndex(index);
                     window.scrollTo(0, 0);
+                    setShowLeftSidebar(false); // Optionally close sidebar on mobile after click
                   }}
                   className={`w-full flex items-center gap-2 text-left p-2 rounded ${
                     currentIndex === index
@@ -105,7 +135,7 @@ export default function CoursePage() {
         </aside>
 
         {/* Main Content */}
-        <main className="w-full lg:w-1/2 p-4 sm:p-6 space-y-6 bg-white">
+        <main className="w-full lg:w-4/6 p-4 sm:p-6 space-y-6 bg-white">
           {/* Header */}
           <div className="flex justify-between items-center flex-wrap gap-2">
             <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 flex items-center gap-2">
@@ -148,9 +178,7 @@ export default function CoursePage() {
                   </button>
                 </div>
                 <pre className="bg-gray-900 text-green-200 text-sm p-4 rounded overflow-x-auto relative">
-                  <code className="language-html whitespace-pre">
-                    {currentTopic.code}
-                  </code>
+                  <code className="language-html whitespace-pre">{currentTopic.code}</code>
                 </pre>
               </>
             )}
@@ -240,14 +268,16 @@ export default function CoursePage() {
           </div>
         </main>
 
-        {/* Right Side Card */}
-        <aside className="w-full lg:w-1/4 p-4 lg:p-6 bg-white border-t lg:border-t-0 lg:border-l border-gray-200">
+        {/* Right Sidebar */}
+        {/* <aside
+          className={`bg-white border-t lg:border-t-0 lg:border-l border-gray-200 p-4 lg:p-6 transition-all duration-300 ${
+            showRightSidebar ? "right-sidebar-expanded" : "right-sidebar-collapsed"
+          } w-full lg:w-1/6`}
+        >
           <div className="bg-gray-50 p-4 rounded-lg border border-gray-200 space-y-4 shadow-sm">
             <div className="flex items-center gap-2">
               <FaUserCheck className="text-xl text-green-600" />
-              <h3 className="text-lg font-semibold text-gray-700">
-                Track Your Progress
-              </h3>
+              <h3 className="text-lg font-semibold text-gray-700">Track Your Progress</h3>
             </div>
             <ul className="text-sm text-gray-600 space-y-1">
               <li className="flex items-center gap-2">
@@ -263,11 +293,9 @@ export default function CoursePage() {
             <button className="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded text-sm font-semibold flex items-center justify-center gap-2">
               <FaSignInAlt /> Sign Up Free
             </button>
-            <p className="text-xs text-gray-500 italic">
-              Note: This is a simulated feature.
-            </p>
+            <p className="text-xs text-gray-500 italic">Note: This is a simulated feature.</p>
           </div>
-        </aside>
+        </aside> */}
       </div>
     </div>
   );
