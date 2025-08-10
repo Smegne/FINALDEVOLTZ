@@ -130,9 +130,9 @@ export default function CoursePage() {
         </div>
       </nav>
 
-      <div className="flex flex-col lg:flex-row">
-        <aside className={`bg-brandBlue border-b lg:border-b-0 lg:border-r border-brandBlue/20 p-4 overflow-y-auto transition-all duration-300 ${showLeftSidebar ? "left-sidebar-expanded" : "left-sidebar-collapsed"} w-25 lg:w-1/6`}>
-          <h2 className="text-xl font-bold mb-4 text-brandBlue">HTML Tutorial</h2>
+      <div className="flex flex-col lg:flex-row ">
+        <aside className={`bg-brandBlue border-b lg:border-b-0 lg:border-r border-brandBlue/20 p-4 overflow-y-auto transition-all duration-300 wholeleft ${showLeftSidebar ? "left-sidebar-expanded" : "left-sidebar-collapsed"} w-25 lg:w-1/6`}>
+          <h2 className="text-xl font-bold text-brandBlue">HTML Tutorial</h2>
           <ul className="space-y-1 text-sm topicesleft">
             {topics.map((topic, index) => (
               <li key={index}>

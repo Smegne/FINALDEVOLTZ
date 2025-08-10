@@ -111,14 +111,17 @@ export default function HomePage() {
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+    <div className="min-h-screen bg-brandBlue from-slate-50 to-blue-50  text-white">
       {/* Navigation */}
       <nav className="bg-white/80 backdrop-blur-md border-b border-slate-200 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <Link href="/" className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-gradient-to-r from-blue-700 to-coral-500 rounded-lg flex items-center justify-center">
-                <Zap className="w-5 h-5 text-white" />
+              <div className="d-flex">
+                {/* <Zap className="w-5 h-5 text-white" /> */}
+                <img src="../logodvwhitey.png" alt="" className="w-30 h-12  border-rounded " style={{ borderRadius: "50%" }} // ✅ correct
+                />
+                 
               </div>
               <span className="text-2xl font-bold bg-gradient-to-r from-blue-700 to-coral-500 bg-clip-text text-transparent">
                 DevVoltz
@@ -194,16 +197,16 @@ export default function HomePage() {
       </nav>
 
       {/* Hero Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8">
+      <section className="py-20 px-4 sm:px-6 lg:px-8 text-white">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h1 className="text-4xl md:text-6xl font-bold text-slate-900 mb-6">
+            <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
               Empowering Africa's
               <span className="bg-gradient-to-r from-blue-700 to-coral-500 bg-clip-text text-transparent block">
                 Tech Future
               </span>
             </h1>
-            <p className="text-xl text-slate-600 mb-8 max-w-3xl mx-auto">
+            <p className="text-xl text-white mb-8 max-w-3xl mx-auto">
               From Addis Ababa to Dubai, DevVoltz is revolutionizing tech education and freelance opportunities. Learn,
               build, and grow with Ethiopia's leading tech platform.
             </p>
@@ -223,15 +226,15 @@ export default function HomePage() {
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8 mb-20">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8 mb-20 border-danger">
             {stats.map((stat, index) => (
-              <div key={index} className="text-center p-4">
+              <div key={index} className="text-center p-4 border-1 border-danger">
                 <div className="flex justify-center mb-4">
                   <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-blue-700 to-coral-500 rounded-lg flex items-center justify-center">
                     <stat.icon className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                   </div>
                 </div>
-                <div className="text-2xl sm:text-3xl font-bold text-slate-900 mb-2">{stat.number}</div>
+                <div className="text-2xl sm:text-3xl font-bold text-slate-900 mb-2 border-white">{stat.number}</div>
                 <div className="text-sm sm:text-base text-slate-600">{stat.label}</div>
               </div>
             ))}
@@ -331,7 +334,7 @@ export default function HomePage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-blue-700 to-coral-500">
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-blue-700 to-brandYellow">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl md:text-5xl font-bold text-white mb-6">Ready to Transform Your Future?</h2>
           <p className="text-xl text-coral-100 mb-8">

@@ -32,7 +32,7 @@ html {
   font-size: 20px;
 }
 
-body1{
+.body1{
   
   overflow-y: scroll; /* or auto */
 
@@ -58,6 +58,7 @@ background: radial-gradient(circle, #299DD5, #df2591);
   border:solid 6px #299DD5;
   
 }
+
 .progress1{
   background-color: #299DD5;
 }
@@ -86,10 +87,10 @@ background: radial-gradient(circle, #299DD5, #df2591);
   padding: 5px;
   font-size: 15px;
 }
-/* .topicesleft{
- background: linear-gradient(to right, #FFD600, #299DD5, #A65885);
-
-} */
+.topicesleft{
+ /* background: linear-gradient(to right, #FFD600, #299DD5, #A65885); */
+font-family: 'Times New Roman', Times, serif;
+}
 .almetam{
   background-color: #FFD600;
 }
@@ -115,9 +116,13 @@ footer{
   --tw-prose-code: var(--brand-blue);
   --tw-prose-bullets: var(--brand-purple);
   --tw-prose-quotes: var(--brand-yellow);
-  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+  /* font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif ,'Times New Roman', Times, serif;
-  line-height: 1.6;
+  line-height: 1.6; */
+
+font-family: 'Times New Roman', Times, serif;
+  line-height: 2;
+
  
   max-width: 100%;
   font-weight: 500;
@@ -230,6 +235,32 @@ font-size: 20px;
   .hamburger{
     display: block;
   }
+
+  .mainCon{
+ 
+  overflow: hidden;
+  width: 100%;
+
+ 
+}
+
+.wholeleft{
+  display: none;
+}
+
+.footerpart{
+  padding-left: 15px;
+
+  justify-content: space-between;
+ display: flex;
+ flex-direction: row;
+ flex-wrap: wrap;
+}
+.topicesleft{
+ /* background: linear-gradient(to right, #FFD600, #299DD5, #A65885); */
+font-family: 'Times New Roman', Times, serif;
+height: 30px;
+}
 }
 
 /* Add subtle shadow and padding for code blocks */

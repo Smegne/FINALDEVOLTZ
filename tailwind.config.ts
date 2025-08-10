@@ -24,6 +24,10 @@ const config: Config = {
         brandYellow: "#FFD600", // Bold. Bright. Visionary.
         brandBlue: "#299DD5",   // Tech-driven. Trusted. Intelligent.
         brandPurple: "#A65885", // Creative. Energetic. Future-ready.
+         brandDarkblue: "#00008B", // Bold. Bright. Visionary.
+        brandBlue2: "#0879D9",   // Tech-driven. Trusted. Intelligent.
+        brandVeryDark: " #030D16", // Creative. Energetic. Future-ready.
+
 
         coral: {
           50: "#fef7f7",
