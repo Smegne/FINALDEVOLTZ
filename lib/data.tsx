@@ -29,31 +29,130 @@ export const allCourses = [
    {
     id:"javascript",
   },
-
-
-     {
-    id:"php",
+  {
+    id: "react",
   },
-
-
-    {
-    id:"react",
+  {
+    id: "nodejs",
   },
+  {
+    id: "SQL",
+  },
+  {
+    id: "Python",
+  },
+  {
+    id: "Java",
+  },
+  {
+    id: "PHP",
+  },
+  {
+    id: "Cplusplus",
+  },
+  {
+    id: "Csyarph",
+  },
+  {
+    id: "MySQL",
+  },
+  {
+    id: "Django",
+  },
+  {
+    id: "typescript",
+  },
+  {
+    id: "AngularJS",
+  },
+  {
+    id: "Git",
+  },
+  {
+    id: "PostgrlSQL",
+  },
+  {
+    id: "MongoDB",
+  },
+  {
+    id: "Kotlin",
+  },
+  {
+    id: "INTROTOBASICSPROGRAMMING",
+  },
+  {
+    id: "Rust",
+  },
+  {
+    id: "ValueJS",
+  },
+  {
+    id: "svelte",
+  },
+  {
+  id: "ruby",
+  },
+  {
+    id: "javaspring",
+  },
+  {
+    id: "csharpdotnet"
+  },
+  {
+    id: "goweb",
+  },
+  {
+    id: "javaandroid",
+  },
+  {
+    id: "swiftios",
+  },
+  {
+    id: "objectivecios",
+  },
+  {
+    id: "reactnative",
+  },{
+  id: "flutter",
+  },
+  {
+    id: "ionic",
 
-     {
-    id:"nodejs",
   },
-
-      {
-    id:"SQL",
+  {
+    id: "xamarin",
   },
-
-       {
-    id:"Java",
+  {
+    id: "sqlite",
   },
-  
-       {
-    id:"typescript",
+  {
+    id: "sqlserver",
   },
-  // Add more courses
+  {
+    id: "oracle",
+  },
+  {
+    id: "cassandra",
+  },
+  {
+    id: "firebase",
+  },
+  {
+    id: "redis",
+  },
+  {
+    id: "c",
+  } ,
+  {
+    id: "golang",
+  },
+  {
+    id: "rlang",
+  },
+  {
+    id: "matlab",
+  },
+  {
+    id: "scala",
+  },
 ]
