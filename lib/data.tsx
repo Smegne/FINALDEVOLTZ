@@ -24,8 +24,36 @@ export const allCourses = [
 
   {
     id:"css",
-  }
+  },
 
+   {
+    id:"javascript",
+  },
+
+
+     {
+    id:"php",
+  },
+
+
+    {
+    id:"react",
+  },
+
+     {
+    id:"nodejs",
+  },
+
+      {
+    id:"SQL",
+  },
+
+       {
+    id:"Java",
+  },
   
+       {
+    id:"typescript",
+  },
   // Add more courses
 ]
