@@ -1,12 +1,151 @@
 import type { Metadata } from 'next'
-// import { GeistSans } from 'geist/font/sans'
-// import { GeistMono } from 'geist/font/mono'
+
 import './globals.css'
 import { GeistSans } from 'geist/font/sans'
 import { GeistMono } from 'geist/font/mono'
 
 export const metadata: Metadata = {
   title: 'Devvoltz Technology',
+  keywords: [
+    'Devvoltz',
+    'Technology',
+    'E-Learning',
+    'Freelance',
+    'Software Solutions',
+    'Bootcamps',
+    'Product Marketing',
+    'Tech Education',
+    'Digital Marketing',
+    'Web Development',
+    'Software Development',
+    'Online Courses',
+    'Tech Bootcamps',
+    'Freelance Services',
+    'Tech Community',
+    'Devvoltz Community',
+    'Tech Innovation',
+    'Tech Solutions',
+    'Tech Startups',
+    'Tech Entrepreneurship',
+    'Tech Careers',
+    'Tech Skills',
+    'Tech Training',
+    'Tech Learning',
+    'Tech Growth',
+    'Tech Leadership',
+    'Tech Development', 
+    'Tech Products',
+    'Tech Services',
+    'Tech Industry',      
+
+    'Tech Trends',
+    'Tech News',
+    'Tech Events',    
+    'Tech Conferences',
+    'Tech Workshops',
+    'Tech Networking',
+    'Tech Collaboration',
+    'Tech Partnerships',    
+    'Tech Ecosystem', 
+
+    'Tech Community Building',
+    'Tech Mentorship',
+    'Tech Support',     
+    'Tech Resources',
+    'Tech Tools',
+    'Tech Platforms',
+    'Tech Solutions',     
+    'Tech Innovation',
+    'Tech Startups',        
+    'Tech Entrepreneurship',
+    'Tech Careers',
+    'Tech Skills',
+    'Tech Training',
+    'Tech Learning',
+    'Tech Growth',      
+    'Tech Leadership',    
+    'Tech Development',
+    'Tech Products',
+    'Tech Services',
+    'Tech Industry',  
+    'Tech Trends',
+    'Tech News',
+    'Tech Events',
+    'Tech Conferences',
+    'Tech Workshops',
+    'Tech Networking',
+    'Tech Collaboration',
+    'SKILLS',
+    'TECHNOLOGY',
+    'DEVVOLTZ', 
+    'DEVVOLTZ TECHNOLOGY',
+    'DEVVOLTZ TECHNOLOGY ETHIOPIA',
+    'DEVVOLTZ TECHNOLOGY ETHIOPIA',
+    'DEVVOLTZ TECHNOLOGY ETHIOPIA', 
+    'DEVVOLTZ TECHNOLOGY ETHIOPIA',
+    'DEVVOLTZ TECHNOLOGY ETHIOPIA',
+    'DEVVOLTZ TECHNOLOGY ETHIOPIA',
+    'DEVVOLTZ TECHNOLOGY ETHIOPIA',
+    'DEVVOLTZ TECHNOLOGY ETHIOPIA',
+    'DEVVOLTZ TECHNOLOGY ETHIOPIA',   
+    'DEVVOLTZ TECHNOLOGY ETHIOPIA',
+  ],
+  authors: [{ name: 'Smegn Destew Molla', url: 'https://smegndestewportfolio.vercel.app' }],
+  openGraph: {
+    title: 'Devvoltz Technology',
+    description: 'Empowering the future of tech through education, innovation, and community.',
+    url: 'https://devvoltz-website.vercel.app',
+    siteName: 'Devvoltz Technology',
+    images: [
+      {
+        url: '/public/Devvoltzlogow.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Devvoltz Technology - Empowering the future of tech through education, innovation, and community.',
+      },
+    ],
+
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Devvoltz Technology',
+    description: 'Empowering the future of tech through education, innovation, and community.',
+    images: ['/Devvoltzlogow.jpg'],
+  },
+  themeColor: '#ffffff',
+  colorScheme: 'light dark',
+  robots: {
+    index: true,
+    follow: true,
+    nocache: false,
+    noimageindex: false,
+    noarchive: false,
+    nosnippet: false,   
+    
+
+ 
+  },
+  verification: {
+    google: 'google-site-verification-code',
+    yandex: 'yandex-verification-code',
+    me: 'me-verification-code',
+    other: {              
+      'other-verification': 'verification-code',
+    },
+  },
+  icons: {
+    icon: '/Devvoltzlogow.jpg',
+    shortcut: '/favicon.ico',
+    apple: '/apple-touch-icon.png',
+    other: [
+      {
+        rel: 'icon',
+        url: '/favicon.ico',
+      },
+    ],
+  },
   description: `
 Devvoltz Technology
 
