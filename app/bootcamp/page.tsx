@@ -1,28 +1,223 @@
 "use client"
 
-import { useState } from "react"
-import { Users, Award, Zap, Code, Globe, GraduationCap, Briefcase } from "lucide-react"
+import { useState, useEffect } from "react"
+import { 
+  Users, 
+  Award, 
+  Zap, 
+  Code, 
+  Globe, 
+  GraduationCap, 
+  Briefcase,
+  X,
+  MapPin,
+  Laptop,
+  BookOpen,
+  CreditCard,
+  CheckCircle
+} from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 
 export default function BootcampPage() {
   const [activeTab, setActiveTab] = useState("upcoming")
+  const [showRegistrationModal, setShowRegistrationModal] = useState(false)
+  const [selectedBootcamp, setSelectedBootcamp] = useState("")
+  const [isClient, setIsClient] = useState(false)
+  const [formData, setFormData] = useState({
+    // Bootcamp Information
+    bootcampName: "",
+    participationMode: "",
+    
+    // Personal Information
+    fullName: "",
+    gender: "",
+    dateOfBirth: "",
+    email: "",
+    phone: "",
+    
+    // Academic/Professional Info
+    institution: "",
+    fieldOfStudy: "",
+    level: "",
+    
+    // In-Person Section
+    address: "",
+    city: "",
+    country: "",
+    
+    // Online Section
+    preferredPlatform: "",
+    internetAvailability: "",
+    
+    // Bootcamp Details
+    selectedCourse: "",
+    priorExperience: "",
+    expectations: "",
+    
+    // Payment Details
+    paymentMethod: "",
+    transactionReference: "",
+    
+    // Declaration
+    agreeToTerms: false,
+    digitalSignature: "",
+    agreementDate: ""
+  })
+  const [errors, setErrors] = useState<Record<string, string>>({})
   const router = useRouter()
 
+  // This ensures we only run client-specific code after hydration
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
+
   const handleApplyNow = (bootcampId: string) => {
-    router.push(`/bootcamp/apply/${bootcampId}`)
+    setSelectedBootcamp(bootcampId)
+    setFormData(prev => ({ ...prev, bootcampName: bootcampId }))
+    setShowRegistrationModal(true)
   }
 
   const handleDownloadCurriculum = (bootcampId: string) => {
-    // Simulate PDF download
-    const link = document.createElement("a")
-    link.href = `/curriculum-${bootcampId}.pdf`
-    link.download = `DevVoltz-${bootcampId}-Curriculum.pdf`
-    link.click()
+    // Only run on client side
+    if (isClient) {
+      const link = document.createElement("a")
+      link.href = `/curriculum-${bootcampId}.pdf`
+      link.download = `DevVoltz-${bootcampId}-Curriculum.pdf`
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+    }
   }
 
   const handleContactInfo = () => {
     router.push("/contact")
+  }
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value, type } = e.target
+    const checked = type === 'checkbox' ? (e.target as HTMLInputElement).checked : undefined
+    
+    setFormData(prev => ({ 
+      ...prev, 
+      [name]: type === 'checkbox' ? checked : value 
+    }))
+    
+    // Clear error when user starts typing
+    if (errors[name]) {
+      setErrors(prev => ({ ...prev, [name]: "" }))
+    }
+  }
+
+  const validateForm = () => {
+    const newErrors: Record<string, string> = {}
+    
+    // Required fields validation
+    if (!formData.bootcampName) newErrors.bootcampName = "Bootcamp selection is required"
+    if (!formData.participationMode) newErrors.participationMode = "Participation mode is required"
+    if (!formData.fullName) newErrors.fullName = "Full name is required"
+    if (!formData.gender) newErrors.gender = "Gender is required"
+    if (!formData.dateOfBirth) newErrors.dateOfBirth = "Date of birth is required"
+    if (!formData.email) newErrors.email = "Email is required"
+    if (!formData.phone) newErrors.phone = "Phone number is required"
+    if (!formData.institution) newErrors.institution = "Institution is required"
+    if (!formData.fieldOfStudy) newErrors.fieldOfStudy = "Field of study is required"
+    if (!formData.level) newErrors.level = "Level is required"
+    
+    // Conditional validation based on participation mode
+    if (formData.participationMode === "in-person") {
+      if (!formData.address) newErrors.address = "Address is required for in-person participation"
+      if (!formData.city) newErrors.city = "City is required for in-person participation"
+      if (!formData.country) newErrors.country = "Country is required for in-person participation"
+    }
+    
+    if (formData.participationMode === "online") {
+      if (!formData.preferredPlatform) newErrors.preferredPlatform = "Preferred platform is required for online participation"
+      if (!formData.internetAvailability) newErrors.internetAvailability = "Internet availability information is required for online participation"
+    }
+    
+    if (!formData.selectedCourse) newErrors.selectedCourse = "Course selection is required"
+    if (!formData.priorExperience) newErrors.priorExperience = "Prior experience information is required"
+    if (!formData.expectations) newErrors.expectations = "Expectations are required"
+    if (!formData.paymentMethod) newErrors.paymentMethod = "Payment method is required"
+    if (!formData.transactionReference) newErrors.transactionReference = "Transaction reference is required"
+    if (!formData.agreeToTerms) newErrors.agreeToTerms = "You must agree to the terms and conditions"
+    if (!formData.digitalSignature) newErrors.digitalSignature = "Digital signature is required"
+    if (!formData.agreementDate) newErrors.agreementDate = "Agreement date is required"
+    
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0
+  }
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    
+    if (validateForm()) {
+      // Here you would typically send the data to your backend API
+      console.log("Registration submitted:", formData)
+      
+      // Simulate API call success
+      setTimeout(() => {
+        alert("Your application has been submitted successfully!")
+        setShowRegistrationModal(false)
+        // Reset form data
+        setFormData({
+          bootcampName: "",
+          participationMode: "",
+          fullName: "",
+          gender: "",
+          dateOfBirth: "",
+          email: "",
+          phone: "",
+          institution: "",
+          fieldOfStudy: "",
+          level: "",
+          address: "",
+          city: "",
+          country: "",
+          preferredPlatform: "",
+          internetAvailability: "",
+          selectedCourse: "",
+          priorExperience: "",
+          expectations: "",
+          paymentMethod: "",
+          transactionReference: "",
+          agreeToTerms: false,
+          digitalSignature: "",
+          agreementDate: ""
+        })
+      }, 500)
+    }
+  }
+
+  const handleCancel = () => {
+    setShowRegistrationModal(false)
+    setFormData({
+      bootcampName: "",
+      participationMode: "",
+      fullName: "",
+      gender: "",
+      dateOfBirth: "",
+      email: "",
+      phone: "",
+      institution: "",
+      fieldOfStudy: "",
+      level: "",
+      address: "",
+      city: "",
+      country: "",
+      preferredPlatform: "",
+      internetAvailability: "",
+      selectedCourse: "",
+      priorExperience: "",
+      expectations: "",
+      paymentMethod: "",
+      transactionReference: "",
+      agreeToTerms: false,
+      digitalSignature: "",
+      agreementDate: ""
+    })
+    setErrors({})
   }
 
   const upcomingBootcamps = [
@@ -175,13 +370,587 @@ export default function BootcampPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+      {/* Registration Modal */}
+      {showRegistrationModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 animate-fadeIn overflow-y-auto">
+          <div className="bg-white rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto animate-scaleIn">
+            <div className="sticky top-0 bg-white border-b border-slate-200 p-6 flex justify-between items-center rounded-t-xl">
+              <h2 className="text-2xl font-bold text-slate-900">Bootcamp Registration</h2>
+              <button
+                onClick={handleCancel}
+                className="text-slate-500 hover:text-slate-700 transition-colors"
+                aria-label="Close modal"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+            
+            <form onSubmit={handleSubmit} className="p-6 space-y-8">
+              {/* Bootcamp Information Section */}
+              <div className="border-b border-slate-200 pb-6">
+                <h3 className="text-lg font-semibold text-slate-900 mb-4 flex items-center">
+                  <BookOpen className="w-5 h-5 mr-2 text-blue-600" />
+                  Bootcamp Information
+                </h3>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label htmlFor="bootcampName" className="block text-sm font-medium text-slate-700 mb-1">
+                      Bootcamp Name *
+                    </label>
+                    <select
+                      id="bootcampName"
+                      name="bootcampName"
+                      value={formData.bootcampName}
+                      onChange={handleInputChange}
+                      className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all ${
+                        errors.bootcampName ? "border-red-500" : "border-slate-300"
+                      }`}
+                    >
+                      <option value="">Select Bootcamp</option>
+                      <option value="fullstack-web-dev">Full Stack Web Development</option>
+                      <option value="mobile-app-dev">Mobile App Development</option>
+                      <option value="data-science">Data Science & Analytics</option>
+                    </select>
+                    {errors.bootcampName && <p className="mt-1 text-sm text-red-500">{errors.bootcampName}</p>}
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-2">Participation Mode *</label>
+                    <div className="flex space-x-4">
+                      <label className="flex items-center">
+                        <input
+                          type="radio"
+                          name="participationMode"
+                          value="online"
+                          checked={formData.participationMode === "online"}
+                          onChange={handleInputChange}
+                          className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-slate-300"
+                        />
+                        <span className="ml-2 text-slate-700">Online</span>
+                      </label>
+                      <label className="flex items-center">
+                        <input
+                          type="radio"
+                          name="participationMode"
+                          value="in-person"
+                          checked={formData.participationMode === "in-person"}
+                          onChange={handleInputChange}
+                          className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-slate-300"
+                        />
+                        <span className="ml-2 text-slate-700">In-Person</span>
+                      </label>
+                    </div>
+                    {errors.participationMode && <p className="mt-1 text-sm text-red-500">{errors.participationMode}</p>}
+                  </div>
+                </div>
+              </div>
+
+              {/* Personal Information Section */}
+              <div className="border-b border-slate-200 pb-6">
+                <h3 className="text-lg font-semibold text-slate-900 mb-4 flex items-center">
+                  <Users className="w-5 h-5 mr-2 text-blue-600" />
+                  Personal Information
+                </h3>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label htmlFor="fullName" className="block text-sm font-medium text-slate-700 mb-1">
+                      Full Name *
+                    </label>
+                    <input
+                      type="text"
+                      id="fullName"
+                      name="fullName"
+                      value={formData.fullName}
+                      onChange={handleInputChange}
+                      className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all ${
+                        errors.fullName ? "border-red-500" : "border-slate-300"
+                      }`}
+                      placeholder="John Doe"
+                    />
+                    {errors.fullName && <p className="mt-1 text-sm text-red-500">{errors.fullName}</p>}
+                  </div>
+                  
+                  <div>
+                    <label htmlFor="gender" className="block text-sm font-medium text-slate-700 mb-1">
+                      Gender *
+                    </label>
+                    <select
+                      id="gender"
+                      name="gender"
+                      value={formData.gender}
+                      onChange={handleInputChange}
+                      className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all ${
+                        errors.gender ? "border-red-500" : "border-slate-300"
+                      }`}
+                    >
+                      <option value="">Select Gender</option>
+                      <option value="male">Male</option>
+                      <option value="female">Female</option>
+                      <option value="other">Other</option>
+                      <option value="prefer-not-to-say">Prefer not to say</option>
+                    </select>
+                    {errors.gender && <p className="mt-1 text-sm text-red-500">{errors.gender}</p>}
+                  </div>
+                  
+                  <div>
+                    <label htmlFor="dateOfBirth" className="block text-sm font-medium text-slate-700 mb-1">
+                      Date of Birth *
+                    </label>
+                    <input
+                      type="date"
+                      id="dateOfBirth"
+                      name="dateOfBirth"
+                      value={formData.dateOfBirth}
+                      onChange={handleInputChange}
+                      className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all ${
+                        errors.dateOfBirth ? "border-red-500" : "border-slate-300"
+                      }`}
+                    />
+                    {errors.dateOfBirth && <p className="mt-1 text-sm text-red-500">{errors.dateOfBirth}</p>}
+                  </div>
+                  
+                  <div>
+                    <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-1">
+                      Email Address *
+                    </label>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all ${
+                        errors.email ? "border-red-500" : "border-slate-300"
+                      }`}
+                      placeholder="john.doe@example.com"
+                    />
+                    {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email}</p>}
+                  </div>
+                  
+                  <div className="md:col-span-2">
+                    <label htmlFor="phone" className="block text-sm font-medium text-slate-700 mb-1">
+                      Phone Number *
+                    </label>
+                    <input
+                      type="tel"
+                      id="phone"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleInputChange}
+                      className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all ${
+                        errors.phone ? "border-red-500" : "border-slate-300"
+                      }`}
+                      placeholder="+251 912 345 678"
+                    />
+                    {errors.phone && <p className="mt-1 text-sm text-red-500">{errors.phone}</p>}
+                  </div>
+                </div>
+              </div>
+
+              {/* Academic/Professional Info Section */}
+              <div className="border-b border-slate-200 pb-6">
+                <h3 className="text-lg font-semibold text-slate-900 mb-4 flex items-center">
+                  <GraduationCap className="w-5 h-5 mr-2 text-blue-600" />
+                  Academic/Professional Information
+                </h3>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label htmlFor="institution" className="block text-sm font-medium text-slate-700 mb-1">
+                      University/College/School *
+                    </label>
+                    <input
+                      type="text"
+                      id="institution"
+                      name="institution"
+                      value={formData.institution}
+                      onChange={handleInputChange}
+                      className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all ${
+                        errors.institution ? "border-red-500" : "border-slate-300"
+                      }`}
+                      placeholder="Addis Ababa University"
+                    />
+                    {errors.institution && <p className="mt-1 text-sm text-red-500">{errors.institution}</p>}
+                  </div>
+                  
+                  <div>
+                    <label htmlFor="fieldOfStudy" className="block text-sm font-medium text-slate-700 mb-1">
+                      Field of Study/Profession *
+                    </label>
+                    <input
+                      type="text"
+                      id="fieldOfStudy"
+                      name="fieldOfStudy"
+                      value={formData.fieldOfStudy}
+                      onChange={handleInputChange}
+                      className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all ${
+                        errors.fieldOfStudy ? "border-red-500" : "border-slate-300"
+                      }`}
+                      placeholder="Computer Science"
+                    />
+                    {errors.fieldOfStudy && <p className="mt-1 text-sm text-red-500">{errors.fieldOfStudy}</p>}
+                  </div>
+                  
+                  <div className="md:col-span-2">
+                    <label htmlFor="level" className="block text-sm font-medium text-slate-700 mb-1">
+                      Year/Level *
+                    </label>
+                    <select
+                      id="level"
+                      name="level"
+                      value={formData.level}
+                      onChange={handleInputChange}
+                      className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all ${
+                        errors.level ? "border-red-500" : "border-slate-300"
+                      }`}
+                    >
+                      <option value="">Select Level</option>
+                      <option value="high-school">High School</option>
+                      <option value="undergraduate">Undergraduate</option>
+                      <option value="graduate">Graduate</option>
+                      <option value="professional">Professional</option>
+                      <option value="other">Other</option>
+                    </select>
+                    {errors.level && <p className="mt-1 text-sm text-red-500">{errors.level}</p>}
+                  </div>
+                </div>
+              </div>
+
+              {/* Conditional Sections based on Participation Mode */}
+              {formData.participationMode === "in-person" && (
+                <div className="border-b border-slate-200 pb-6">
+                  <h3 className="text-lg font-semibold text-slate-900 mb-4 flex items-center">
+                    <MapPin className="w-5 h-5 mr-2 text-blue-600" />
+                    In-Person Participation Details
+                  </h3>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label htmlFor="address" className="block text-sm font-medium text-slate-700 mb-1">
+                        Current Address *
+                      </label>
+                      <input
+                        type="text"
+                        id="address"
+                        name="address"
+                        value={formData.address}
+                        onChange={handleInputChange}
+                        className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all ${
+                          errors.address ? "border-red-500" : "border-slate-300"
+                        }`}
+                        placeholder="Street address"
+                      />
+                      {errors.address && <p className="mt-1 text-sm text-red-500">{errors.address}</p>}
+                    </div>
+                    
+                    <div>
+                      <label htmlFor="city" className="block text-sm font-medium text-slate-700 mb-1">
+                        City *
+                      </label>
+                      <input
+                        type="text"
+                        id="city"
+                        name="city"
+                        value={formData.city}
+                        onChange={handleInputChange}
+                        className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all ${
+                          errors.city ? "border-red-500" : "border-slate-300"
+                        }`}
+                        placeholder="Addis Ababa"
+                      />
+                      {errors.city && <p className="mt-1 text-sm text-red-500">{errors.city}</p>}
+                    </div>
+                    
+                    <div className="md:col-span-2">
+                      <label htmlFor="country" className="block text-sm font-medium text-slate-700 mb-1">
+                        Country *
+                      </label>
+                      <select
+                        id="country"
+                        name="country"
+                        value={formData.country}
+                        onChange={handleInputChange}
+                        className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all ${
+                          errors.country ? "border-red-500" : "border-slate-300"
+                        }`}
+                      >
+                        <option value="">Select Country</option>
+                        <option value="Ethiopia">Ethiopia</option>
+                        <option value="Other">Other</option>
+                      </select>
+                      {errors.country && <p className="mt-1 text-sm text-red-500">{errors.country}</p>}
+                  </div>
+                  </div>
+                </div>
+              )}
+
+              {formData.participationMode === "online" && (
+                <div className="border-b border-slate-200 pb-6">
+                  <h3 className="text-lg font-semibold text-slate-900 mb-4 flex items-center">
+                    <Laptop className="w-5 h-5 mr-2 text-blue-600" />
+                    Online Participation Details
+                  </h3>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label htmlFor="preferredPlatform" className="block text-sm font-medium text-slate-700 mb-1">
+                        Preferred Platform *
+                      </label>
+                      <select
+                        id="preferredPlatform"
+                        name="preferredPlatform"
+                        value={formData.preferredPlatform}
+                        onChange={handleInputChange}
+                        className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all ${
+                          errors.preferredPlatform ? "border-red-500" : "border-slate-300"
+                        }`}
+                      >
+                        <option value="">Select Platform</option>
+                        <option value="zoom">Zoom</option>
+                        <option value="google-meet">Google Meet</option>
+                        <option value="microsoft-teams">Microsoft Teams</option>
+                      </select>
+                      {errors.preferredPlatform && <p className="mt-1 text-sm text-red-500">{errors.preferredPlatform}</p>}
+                    </div>
+                    
+                    <div>
+                      <label htmlFor="internetAvailability" className="block text-sm font-medium text-slate-700 mb-1">
+                        Internet Availability *
+                      </label>
+                      <select
+                        id="internetAvailability"
+                        name="internetAvailability"
+                        value={formData.internetAvailability}
+                        onChange={handleInputChange}
+                        className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all ${
+                          errors.internetAvailability ? "border-red-500" : "border-slate-300"
+                        }`}
+                      >
+                        <option value="">Select Availability</option>
+                        <option value="excellent">Excellent (Stable, High Speed)</option>
+                        <option value="good">Good (Mostly Stable)</option>
+                        <option value="fair">Fair (Occasional Issues)</option>
+                        <option value="poor">Poor (Frequent Issues)</option>
+                      </select>
+                      {errors.internetAvailability && <p className="mt-1 text-sm text-red-500">{errors.internetAvailability}</p>}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Bootcamp Details Section */}
+              <div className="border-b border-slate-200 pb-6">
+                <h3 className="text-lg font-semibold text-slate-900 mb-4 flex items-center">
+                  <Code className="w-5 h-5 mr-2 text-blue-600" />
+                  Bootcamp Details
+                </h3>
+                
+                <div className="grid grid-cols-1 gap-4">
+                  <div>
+                    <label htmlFor="selectedCourse" className="block text-sm font-medium text-slate-700 mb-1">
+                      Selected Course/Track *
+                    </label>
+                    <select
+                      id="selectedCourse"
+                      name="selectedCourse"
+                      value={formData.selectedCourse}
+                      onChange={handleInputChange}
+                      className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all ${
+                        errors.selectedCourse ? "border-red-500" : "border-slate-300"
+                      }`}
+                    >
+                      <option value="">Select Course</option>
+                      <option value="frontend">Frontend Development</option>
+                      <option value="backend">Backend Development</option>
+                      <option value="fullstack">Full Stack Development</option>
+                      <option value="mobile">Mobile Development</option>
+                      <option value="data-science">Data Science</option>
+                    </select>
+                    {errors.selectedCourse && <p className="mt-1 text-sm text-red-500">{errors.selectedCourse}</p>}
+                  </div>
+                  
+                  <div>
+                    <label htmlFor="priorExperience" className="block text-sm font-medium text-slate-700 mb-1">
+                      Prior Experience *
+                    </label>
+                    <textarea
+                      id="priorExperience"
+                      name="priorExperience"
+                      value={formData.priorExperience}
+                      onChange={handleInputChange}
+                      rows={3}
+                      className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all ${
+                        errors.priorExperience ? "border-red-500" : "border-slate-300"
+                      }`}
+                      placeholder="Describe any prior programming or technical experience you have..."
+                    />
+                    {errors.priorExperience && <p className="mt-1 text-sm text-red-500">{errors.priorExperience}</p>}
+                  </div>
+                  
+                  <div>
+                    <label htmlFor="expectations" className="block text-sm font-medium text-slate-700 mb-1">
+                      Expectations from the Bootcamp *
+                    </label>
+                    <textarea
+                      id="expectations"
+                      name="expectations"
+                      value={formData.expectations}
+                      onChange={handleInputChange}
+                      rows={3}
+                      className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all ${
+                        errors.expectations ? "border-red-500" : "border-slate-300"
+                      }`}
+                      placeholder="What do you hope to achieve from this bootcamp?"
+                    />
+                    {errors.expectations && <p className="mt-1 text-sm text-red-500">{errors.expectations}</p>}
+                  </div>
+                </div>
+              </div>
+
+              {/* Payment Details Section */}
+              <div className="border-b border-slate-200 pb-6">
+                <h3 className="text-lg font-semibold text-slate-900 mb-4 flex items-center">
+                  <CreditCard className="w-5 h-5 mr-2 text-blue-600" />
+                  Payment Details
+                </h3>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label htmlFor="paymentMethod" className="block text-sm font-medium text-slate-700 mb-1">
+                      Payment Method *
+                    </label>
+                    <select
+                      id="paymentMethod"
+                      name="paymentMethod"
+                      value={formData.paymentMethod}
+                      onChange={handleInputChange}
+                      className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all ${
+                        errors.paymentMethod ? "border-red-500" : "border-slate-300"
+                      }`}
+                    >
+                      <option value="">Select Payment Method</option>
+                      <option value="cash">Cash</option>
+                      <option value="bank-transfer">Bank Transfer</option>
+                      <option value="telebirr">Telebirr</option>
+                      <option value="chapa">Chapa</option>
+                      <option value="card">Credit/Debit Card</option>
+                    </select>
+                    {errors.paymentMethod && <p className="mt-1 text-sm text-red-500">{errors.paymentMethod}</p>}
+                  </div>
+                  
+                  <div>
+                    <label htmlFor="transactionReference" className="block text-sm font-medium text-slate-700 mb-1">
+                      Transaction Reference Number *
+                    </label>
+                    <input
+                      type="text"
+                      id="transactionReference"
+                      name="transactionReference"
+                      value={formData.transactionReference}
+                      onChange={handleInputChange}
+                      className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all ${
+                        errors.transactionReference ? "border-red-500" : "border-slate-300"
+                      }`}
+                      placeholder="TRX-123456789"
+                    />
+                    {errors.transactionReference && <p className="mt-1 text-sm text-red-500">{errors.transactionReference}</p>}
+                  </div>
+                </div>
+              </div>
+
+              {/* Declaration Section */}
+              <div className="pb-6">
+                <h3 className="text-lg font-semibold text-slate-900 mb-4 flex items-center">
+                  <CheckCircle className="w-5 h-5 mr-2 text-blue-600" />
+                  Declaration
+                </h3>
+                
+                <div className="grid grid-cols-1 gap-4">
+                  <div className="flex items-start">
+                    <input
+                      type="checkbox"
+                      id="agreeToTerms"
+                      name="agreeToTerms"
+                      checked={formData.agreeToTerms}
+                      onChange={handleInputChange}
+                      className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-slate-300 rounded mt-1"
+                    />
+                    <label htmlFor="agreeToTerms" className="ml-2 block text-sm text-slate-700">
+                      I hereby declare that the information provided is true and correct to the best of my knowledge. 
+                      I agree to the terms and conditions of the bootcamp program.
+                    </label>
+                  </div>
+                  {errors.agreeToTerms && <p className="text-sm text-red-500">{errors.agreeToTerms}</p>}
+                  
+                  <div>
+                    <label htmlFor="digitalSignature" className="block text-sm font-medium text-slate-700 mb-1">
+                      Digital Signature (Full Name) *
+                    </label>
+                    <input
+                      type="text"
+                      id="digitalSignature"
+                      name="digitalSignature"
+                      value={formData.digitalSignature}
+                      onChange={handleInputChange}
+                      className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all ${
+                        errors.digitalSignature ? "border-red-500" : "border-slate-300"
+                      }`}
+                      placeholder="Type your full name as digital signature"
+                    />
+                    {errors.digitalSignature && <p className="mt-1 text-sm text-red-500">{errors.digitalSignature}</p>}
+                  </div>
+                  
+                  <div>
+                    <label htmlFor="agreementDate" className="block text-sm font-medium text-slate-700 mb-1">
+                      Date *
+                    </label>
+                    <input
+                      type="date"
+                      id="agreementDate"
+                      name="agreementDate"
+                      value={formData.agreementDate}
+                      onChange={handleInputChange}
+                      className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all ${
+                        errors.agreementDate ? "border-red-500" : "border-slate-300"
+                      }`}
+                    />
+                    {errors.agreementDate && <p className="mt-1 text-sm text-red-500">{errors.agreementDate}</p>}
+                  </div>
+                </div>
+              </div>
+
+              {/* Submit Buttons */}
+              <div className="flex justify-end space-x-4 pt-6 border-t border-slate-200">
+                <button
+                  type="button"
+                  onClick={handleCancel}
+                  className="px-6 py-3 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-100 transition-colors font-medium"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-6 py-3 bg-gradient-to-r from-blue-700 to-coral-500 text-white rounded-lg hover:shadow-lg transition-all font-medium"
+                >
+                  Submit Application
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
       {/* Navigation */}
       <nav className="bg-white/80 backdrop-blur-md border-b border-slate-200 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <Link href="/" className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-gradient-to-r from-blue-700 to-coral-500 rounded-lg flex items-center justify-center">
+              <div className="w-8 h-8 bg-gradient-to-r  rounded-lg flex items-center justify-center">
                 <Zap className="w-5 h-5 text-white" />
+                 <img src="../logodvwhitey.png" alt="" className="w-20 h-10  border-rounded " style={{ borderRadius: "50%" }} // ✅ correct
+                />
               </div>
               <span className="text-2xl font-bold bg-gradient-to-r from-blue-700 to-coral-500 bg-clip-text text-transparent">
                 DevVoltz
@@ -241,11 +1010,13 @@ export default function BootcampPage() {
             </div>
           </div>
 
-          {/* Stats */}
+          {/* Stats - Using isClient to prevent hydration mismatch */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-20">
             {stats.map((stat, index) => (
               <div key={index} className="text-center">
-                <div className="text-3xl font-bold text-slate-900 mb-2">{stat.number}</div>
+                <div className="text-3xl font-bold text-slate-900 mb-2">
+                  {isClient ? stat.number : "Loading..."}
+                </div>
                 <div className="text-slate-600">{stat.label}</div>
               </div>
             ))}
@@ -548,7 +1319,7 @@ export default function BootcampPage() {
             </div>
             <div>
               <h3 className="text-lg font-semibold mb-4">Company</h3>
-              <ul className="space-y-2 text-slate-400">
+              <ul className="space-Y-2 text-slate-400">
                 <li>
                   <Link href="/about" className="hover:text-white transition-colors">
                     About Us
@@ -577,6 +1348,23 @@ export default function BootcampPage() {
           </div>
         </div>
       </footer>
+
+      <style jsx>{`
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        @keyframes scaleIn {
+          from { transform: scale(0.95); opacity: 0; }
+          to { transform: scale(1); opacity: 1; }
+        }
+        .animate-fadeIn {
+          animation: fadeIn 0.2s ease-out;
+        }
+        .animate-scaleIn {
+          animation: scaleIn 0.2s ease-out;
+        }
+      `}</style>
     </div>
   )
 }

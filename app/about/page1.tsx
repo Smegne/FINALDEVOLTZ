@@ -4,37 +4,30 @@ import Link from "next/link"
 export default function AboutPage() {
   const team = [
     {
-      name: "SEMEGN DESTAW",
-      role: "CEO and Founder",
-      bio: "Full Stack Developer, Software Engineer, Computer Scientist, and Project Manager with a passion for building innovative solutions and leading impactful projects.",
-      image: "/semegn.jpg?height=300&width=300",
-      linkedin: "#",
-    },
-    {
-      name: "MELKAMU WALLE",
-      role: "COO and Co-Founder",
-      bio: "Front-End Developer, UI/UX Designer,Video Editor and Graphic Designer dedicated to crafting intuitive digital experiences and visually engaging designs.",
-      image: "/melke.jpg?height=300&width=300",
-      linkedin: "#",
-    },
-    {
-      name: "H/MESKEL YIHUN",
-      role: "CTO and Co-founder",
-      bio: "Full Stack Developer and Computer Scientist passionate about building innovative solutions and solving complex problems through technology.",
-      image: "/HMY.jpg?height=300&width=300",
-      linkedin: "#",
-    },
-    {
-      name: "BIRTUKAN",
-      role: "CMO and Co-Founer",
-      bio: "Digital Marketing Specialist and Social Media Manager dedicated to growing online presence, building strong brand identities, and creating impactful digital campaigns.",
+      name: "Dawit Mekonnen",
+      role: "CEO & Co-Founder",
+      bio: "Former software engineer at Microsoft with 10+ years of experience in tech leadership and education.",
       image: "/placeholder.svg?height=300&width=300",
       linkedin: "#",
     },
     {
-      name: "NARDOS",
-      role: "CXO and Co-Founder",
-      bio: "Digital Marketing Specialist and Content Creator passionate about building engaging brand stories, driving online growth, and creating impactful digital experiences.",
+      name: "Hanan Al-Zahra",
+      role: "CTO & Co-Founder",
+      bio: "Ex-Google engineer specializing in scalable systems and AI. Passionate about tech education in emerging markets.",
+      image: "/placeholder.svg?height=300&width=300",
+      linkedin: "#",
+    },
+    {
+      name: "Samuel Tadesse",
+      role: "Head of Education",
+      bio: "Former university professor and curriculum designer with expertise in modern web development technologies.",
+      image: "/placeholder.svg?height=300&width=300",
+      linkedin: "#",
+    },
+    {
+      name: "Fatima Hassan",
+      role: "Head of Operations",
+      bio: "Business operations expert with experience scaling tech companies across Africa and the Middle East.",
       image: "/placeholder.svg?height=300&width=300",
       linkedin: "#",
     },
@@ -116,8 +109,6 @@ export default function AboutPage() {
             <Link href="/" className="flex items-center space-x-2">
               <div className="w-8 h-8 bg-gradient-to-r from-blue-700 to-coral-500 rounded-lg flex items-center justify-center">
                 <Zap className="w-5 h-5 text-white" />
-                <img src="../logodvwhitey.png" alt="" className="w-30 h-10  border-rounded " style={{ borderRadius: "50%" }} // ✅ correct
-                />
               </div>
               <span className="text-2xl font-bold bg-gradient-to-r from-blue-700 to-coral-500 bg-clip-text text-transparent">
                 DevVoltz

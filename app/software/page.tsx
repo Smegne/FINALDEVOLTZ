@@ -14,16 +14,26 @@ import {
   ArrowRight,
   Users,
   Clock,
+  X,
 } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 
 export default function SoftwarePage() {
   const [activeCategory, setActiveCategory] = useState("all")
+  const [showRequestModal, setShowRequestModal] = useState(false)
+  const [formData, setFormData] = useState({
+    title: "",
+    description: "",
+    timeline: "",
+    budget: "",
+    contactInfo: "",
+  })
+  const [errors, setErrors] = useState<Record<string, string>>({})
   const router = useRouter()
 
   const handleRequestCustom = () => {
-    router.push("/contact")
+    setShowRequestModal(true)
   }
 
   const handlePurchase = (productId: string) => {
@@ -32,6 +42,62 @@ export default function SoftwarePage() {
 
   const handleDemo = (productId: string) => {
     router.push(`/software/demo/${productId}`)
+  }
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target
+    setFormData(prev => ({ ...prev, [name]: value }))
+    // Clear error when user starts typing
+    if (errors[name]) {
+      setErrors(prev => ({ ...prev, [name]: "" }))
+    }
+  }
+
+  const validateForm = () => {
+    const newErrors: Record<string, string> = {}
+    
+    if (!formData.title.trim()) newErrors.title = "Project title is required"
+    if (!formData.description.trim()) newErrors.description = "Description is required"
+    if (!formData.timeline.trim()) newErrors.timeline = "Timeline is required"
+    if (!formData.budget.trim()) newErrors.budget = "Budget is required"
+    if (!formData.contactInfo.trim()) newErrors.contactInfo = "Contact information is required"
+    
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0
+  }
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    
+    if (validateForm()) {
+      // Here you would typically send the data to your backend API
+      console.log("Custom request submitted:", formData)
+      
+      // Simulate API call success
+      setTimeout(() => {
+        alert("Your custom software request has been submitted successfully!")
+        setShowRequestModal(false)
+        setFormData({
+          title: "",
+          description: "",
+          timeline: "",
+          budget: "",
+          contactInfo: "",
+        })
+      }, 500)
+    }
+  }
+
+  const handleCancel = () => {
+    setShowRequestModal(false)
+    setFormData({
+      title: "",
+      description: "",
+      timeline: "",
+      budget: "",
+      contactInfo: "",
+    })
+    setErrors({})
   }
 
   const categories = [
@@ -173,13 +239,143 @@ export default function SoftwarePage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+      {/* Custom Request Modal */}
+      {showRequestModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 animate-fadeIn">
+          <div className="bg-white rounded-xl max-w-md w-full max-h-[90vh] overflow-y-auto animate-scaleIn">
+            <div className="sticky top-0 bg-white border-b border-slate-200 p-4 flex justify-between items-center rounded-t-xl">
+              <h2 className="text-xl font-bold text-slate-900">Request Custom Software</h2>
+              <button
+                onClick={handleCancel}
+                className="text-slate-500 hover:text-slate-700 transition-colors"
+                aria-label="Close modal"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            
+            <form onSubmit={handleSubmit} className="p-6 space-y-4">
+              <div>
+                <label htmlFor="title" className="block text-sm font-medium text-slate-700 mb-1">
+                  Project Title *
+                </label>
+                <input
+                  type="text"
+                  id="title"
+                  name="title"
+                  value={formData.title}
+                  onChange={handleInputChange}
+                  className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all ${
+                    errors.title ? "border-red-500" : "border-slate-300"
+                  }`}
+                  placeholder="e.g., E-commerce Website Development"
+                />
+                {errors.title && <p className="mt-1 text-sm text-red-500">{errors.title}</p>}
+              </div>
+              
+              <div>
+                <label htmlFor="description" className="block text-sm font-medium text-slate-700 mb-1">
+                  Project Description *
+                </label>
+                <textarea
+                  id="description"
+                  name="description"
+                  value={formData.description}
+                  onChange={handleInputChange}
+                  rows={4}
+                  className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all ${
+                    errors.description ? "border-red-500" : "border-slate-300"
+                  }`}
+                  placeholder="Describe your project requirements, goals, and any specific features you need..."
+                />
+                {errors.description && <p className="mt-1 text-sm text-red-500">{errors.description}</p>}
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label htmlFor="timeline" className="block text-sm font-medium text-slate-700 mb-1">
+                    Timeline *
+                  </label>
+                  <input
+                    type="text"
+                    id="timeline"
+                    name="timeline"
+                    value={formData.timeline}
+                    onChange={handleInputChange}
+                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all ${
+                      errors.timeline ? "border-red-500" : "border-slate-300"
+                    }`}
+                    placeholder="e.g., 3 months"
+                  />
+                  {errors.timeline && <p className="mt-1 text-sm text-red-500">{errors.timeline}</p>}
+                </div>
+                
+                <div>
+                  <label htmlFor="budget" className="block text-sm font-medium text-slate-700 mb-1">
+                    Budget ($) *
+                  </label>
+                  <input
+                    type="text"
+                    id="budget"
+                    name="budget"
+                    value={formData.budget}
+                    onChange={handleInputChange}
+                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all ${
+                      errors.budget ? "border-red-500" : "border-slate-300"
+                    }`}
+                    placeholder="e.g., $5000"
+                  />
+                  {errors.budget && <p className="mt-1 text-sm text-red-500">{errors.budget}</p>}
+                </div>
+              </div>
+              
+              <div>
+                <label htmlFor="contactInfo" className="block text-sm font-medium text-slate-700 mb-1">
+                  Contact Information *
+                </label>
+                <input
+                  type="text"
+                  id="contactInfo"
+                  name="contactInfo"
+                  value={formData.contactInfo}
+                  onChange={handleInputChange}
+                  className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all ${
+                    errors.contactInfo ? "border-red-500" : "border-slate-300"
+                  }`}
+                  placeholder="Email or phone number"
+                />
+                {errors.contactInfo && <p className="mt-1 text-sm text-red-500">{errors.contactInfo}</p>}
+              </div>
+              
+              <div className="flex justify-end space-x-3 pt-4">
+                <button
+                  type="button"
+                  onClick={handleCancel}
+                  className="px-4 py-2 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-100 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-gradient-to-r from-blue-700 to-coral-500 text-white rounded-lg hover:shadow-lg transition-all"
+                >
+                  Submit Request
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
       {/* Navigation */}
       <nav className="bg-white/80 backdrop-blur-md border-b border-slate-200 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <Link href="/" className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-gradient-to-r from-blue-700 to-coral-500 rounded-lg flex items-center justify-center">
+              <div className="w-8 h-8 bg-gradient-to-r rounded-lg flex items-center justify-center">
                 <Zap className="w-5 h-5 text-white" />
+                 <img src="../logodvwhitey.png" alt="" className="w-30 h-10  border-rounded " style={{ borderRadius: "50%" }} // ✅ correct
+                />
               </div>
               <span className="text-2xl font-bold bg-gradient-to-r from-blue-700 to-coral-500 bg-clip-text text-transparent">
                 DevVoltz
@@ -573,6 +769,23 @@ export default function SoftwarePage() {
           </div>
         </div>
       </footer>
+
+      <style jsx>{`
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        @keyframes scaleIn {
+          from { transform: scale(0.95); opacity: 0; }
+          to { transform: scale(1); opacity: 1; }
+        }
+        .animate-fadeIn {
+          animation: fadeIn 0.2s ease-out;
+        }
+        .animate-scaleIn {
+          animation: scaleIn 0.2s ease-out;
+        }
+      `}</style>
     </div>
   )
 }
